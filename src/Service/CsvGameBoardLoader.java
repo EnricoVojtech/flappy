@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -34,9 +36,21 @@ public class CsvGameBoardLoader implements GameBoardLoader {
             String[] line = br.readLine().split(";");
             int typeCount = Integer.parseInt(line[0]);
 
+            Map<String,Tile> tilesTypes = new HashMap<>();
             for (int i = 0; i < typeCount; i++) {
                 br.readLine();
+                line = br.readLine().split(";");
+                String tileType = line[0];
+                String clazz = line[0];
+                int x = Integer.parseInt(line[2]);
+                int y = Integer.parseInt(line[3]);
+                int w = Integer.parseInt(line[4]);
+                int h = Integer.parseInt(line[5]);
+                String url = line[6];
+                Tile tile = creatTile(clazz, x ,y,w,h);
+                tilesTypes.put(tileType,tile);
             }
+            
 
             line = br.readLine().split(";");
             int rows = Integer.parseInt(line[0]);
@@ -56,9 +70,12 @@ public class CsvGameBoardLoader implements GameBoardLoader {
                     else {
                         cell = "";
                     } //povazujeme ji prazdnou
-                    if (!"".equals(cell)) {
-                   tiles[i][j]=new WallTile();
-                    }
+                    
+                    
+      
+                   
+                   tiles[i][j]=tilesTypes.get(cell);
+                    
                 }
             }
             GameBoard gb = new GameBoard(tiles);
@@ -68,5 +85,10 @@ public class CsvGameBoardLoader implements GameBoardLoader {
         }
 
     }
+
+	private Tile creatTile(String clazz, int x, int y, int w, int h) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }
