@@ -8,13 +8,20 @@ package Service;
 import flappybird3.game.GameBoard;
 import flappybird3.game.Tile;
 import flappybird3.game.tiles.WallTile;
+
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -38,7 +45,6 @@ public class CsvGameBoardLoader implements GameBoardLoader {
 
             Map<String,Tile> tilesTypes = new HashMap<>();
             for (int i = 0; i < typeCount; i++) {
-                br.readLine();
                 line = br.readLine().split(";");
                 String tileType = line[0];
                 String clazz = line[0];
@@ -47,7 +53,7 @@ public class CsvGameBoardLoader implements GameBoardLoader {
                 int w = Integer.parseInt(line[4]);
                 int h = Integer.parseInt(line[5]);
                 String url = line[6];
-                Tile tile = creatTile(clazz, x ,y,w,h);
+                Tile tile = creatTile(clazz, x ,y,w,h,url);
                 tilesTypes.put(tileType,tile);
             }
             
@@ -86,9 +92,31 @@ public class CsvGameBoardLoader implements GameBoardLoader {
 
     }
 
-	private Tile creatTile(String clazz, int x, int y, int w, int h) {
-		// TODO Auto-generated method stub
-		return null;
+	private Tile creatTile(String clazz, int x, int y, int w, int h, String url) {
+		
+		
+		
+		try{
+			// stahnout URL do promene
+			BufferedImage originalImage = ImageIO.read(new URL(url));
+			//vyriznout Spirite z URL
+			BufferedImage croppedImage = originalImage.getSubimage(x, y, w, h);
+			//vytvorime typ dlazdice
+			BufferedImage resizeImage= new BufferedImage(Tile.size,Tile.size,BufferedImage.TYPE_INT_ARGB);
+			Graphics2D g =resizeImage.createGraphics();
+			g.drawImage(croppedImage, 0, 0, Tile.size, Tile.size, null);
+			//zvetsime obrazek na velikost dlazdice
+			switch(clazz){
+			default:
+			return new WallTile(resizeImage);
+			}
+			
+		}catch(MalformedURLException e){
+			throw new RuntimeException("ds");
+		}catch(IOException e){
+			throw new RuntimeException("ds");
+		}
+		
 	}
 
 }
