@@ -28,7 +28,7 @@ public class MainWindow extends JFrame {
 
         public void paint(Graphics g) {
             super.paint(g); //vykresli prazdny panel
-            gameBoard.draw(g);  //vykresli hraci plochu 
+            gameBoard.drawAndTestCollision(g);  //vykresli hraci plochu 
         }
     }
 

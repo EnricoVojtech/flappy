@@ -27,7 +27,7 @@ public class GameBoard implements TickAware {
 		 * kresl� cely herni sv�t(zdi,bonusy,ptaka) na platno g.
 		 * @param g
 		 */
-		public void  draw(Graphics g){
+		public void  drawAndTestCollision(Graphics g){
 			//spocitame prvni j-index bunky, kterou ma smysl kreslit (je videt je viewportu)
 			int minJ = shiftX/Tile.size;
 			int maxJ = minJ + viewportWidth/Tile.size +2;
@@ -42,6 +42,7 @@ public class GameBoard implements TickAware {
 					int screenX =j*Tile.size - shiftX;
 					int screenY =i*Tile.size;
 					t.draw(g,screenX,screenY);
+					//testovani moynost kolize s ptakem
 					}
 				}
 			}
