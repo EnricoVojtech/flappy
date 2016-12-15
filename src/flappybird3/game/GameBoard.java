@@ -3,6 +3,7 @@ package flappybird3.game;
 import flappybird3.game.tiles.BonusTile;
 import flappybird3.game.tiles.WallTile;
 import java.awt.Graphics;
+import java.awt.Image;
 
 public class GameBoard implements TickAware {
 	Tile[][] tiles;
@@ -11,17 +12,11 @@ public class GameBoard implements TickAware {
 	Bird bird;
 	boolean gameOver = false;
 
-	public GameBoard() {
-		tiles = new Tile[20][20];
-		// tiles[2][1] = new WallTile();
-		// tiles[2][0] = new WallTile();
-		bird = new Bird(viewportWidth / 2, (tiles.length * Tile.size / 2)); // umisteni
-																			// ptaka
-	}
 
-	public GameBoard(Tile[][] tiles) {
+
+	public GameBoard(Tile[][] tiles, Image imageOfTheBird) {
 		this.tiles = tiles;
-		bird = new Bird(viewportWidth / 2, (tiles.length * Tile.size / 2));
+		bird = new Bird(viewportWidth / 2, (tiles.length * Tile.size / 2),imageOfTheBird);
 	}
 
 	/**
@@ -40,6 +35,7 @@ public class GameBoard implements TickAware {
 				int j2 = j % tiles[0].length;
 				// chceme aby svet "tocil dokola" j2 pohybuje 0... pocet sloupu
 				// sloupcu-1
+				
 
 				Tile t = tiles[i][j2];
 				if (t != null) { // je na souradnich nejaka dlazdice
@@ -58,6 +54,11 @@ public class GameBoard implements TickAware {
 						if (bird.collidesWithRactangles(screenX, screenY, Tile.size, Tile.size)) {
 							((BonusTile) t).setVisible(false);
 							System.out.println("safsa");
+						//	if(j % 20==1){
+							//	((BonusTile) t).setVisible(true);
+						//	}
+							
+							
 						}
 
 					}

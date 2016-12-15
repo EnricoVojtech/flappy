@@ -44,6 +44,7 @@ public class CsvGameBoardLoader implements GameBoardLoader {
 
 			Map<String, Tile> tileTipes = new HashMap<>();
 			// radky definice dlazdic
+			BufferedImage imageOfTheBird= null;
 			for (int i = 0; i < typeCount; i++) {
 				line = br.readLine().split(";");
 				String tileTipe = line[0];
@@ -53,8 +54,14 @@ public class CsvGameBoardLoader implements GameBoardLoader {
 				int z = Integer.parseInt(line[4]);
 				int w = Integer.parseInt(line[5]);
 				String url = line[6];
-				Tile tile = createTile(clazz, x, y, z, w, url);
-				tileTipes.put(tileTipe, tile);
+				if(clazz.equals("Bird")){
+					//urcuje radek ptaka
+					 imageOfTheBird = loadImage(x, y, z, w, url);
+				}else{
+					Tile tile = createTile(clazz, x, y, z, w, url);
+					tileTipes.put(tileTipe, tile);		
+				}
+			
 			}
 			line = br.readLine().split(";");
 			int rows = Integer.parseInt(line[0]);
@@ -77,7 +84,7 @@ public class CsvGameBoardLoader implements GameBoardLoader {
 					tiles[i][j] = tileTipes.get(cell);
 				}
 			}
-			GameBoard gb = new GameBoard(tiles);
+			GameBoard gb = new GameBoard(tiles, imageOfTheBird);
 			return gb;
 		} catch (IOException e) {
 			throw new RuntimeException("Chyba pri cteni souboru", e);
@@ -87,17 +94,7 @@ public class CsvGameBoardLoader implements GameBoardLoader {
 	private Tile createTile(String clazz, int x, int y, int w, int h, String url) {
 		// stahnout obrazek z URL a ulozit do promene
 		try {
-			BufferedImage original = ImageIO.read(new URL(url));
-			// vyrizneme sprite z obrazku
-
-			BufferedImage cropedImg = original.getSubimage(x, y, w, h);
-			// zvetsime dlazdice
-
-			BufferedImage resizeImage = new BufferedImage(Tile.size, Tile.size, BufferedImage.TYPE_INT_ARGB);
-			;
-			Graphics2D g = resizeImage.createGraphics();
-			g.drawImage(cropedImg, 0, 0, Tile.size, Tile.size, null);
-			// vytvorime odpovidajici typ dlazdice
+			BufferedImage resizeImage = loadImage(x, y, w, h, url);
 			switch (clazz) {
 			case "Wall":
 				return new WallTile(resizeImage);
@@ -115,6 +112,21 @@ public class CsvGameBoardLoader implements GameBoardLoader {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	private BufferedImage loadImage(int x, int y, int w, int h, String url) throws IOException, MalformedURLException {
+		BufferedImage original = ImageIO.read(new URL(url));
+		// vyrizneme sprite z obrazku
+
+		BufferedImage cropedImg = original.getSubimage(x, y, w, h);
+		// zvetsime dlazdice
+
+		BufferedImage resizeImage = new BufferedImage(Tile.size, Tile.size, BufferedImage.TYPE_INT_ARGB);
+		;
+		Graphics2D g = resizeImage.createGraphics();
+		g.drawImage(cropedImg, 0, 0, Tile.size, Tile.size, null);
+		// vytvorime odpovidajici typ dlazdice
+		return resizeImage;
 	}
 
 }
