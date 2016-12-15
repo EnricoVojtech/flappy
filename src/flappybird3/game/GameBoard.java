@@ -36,6 +36,7 @@ public class GameBoard implements TickAware {
 				// chceme aby svet "tocil dokola" j2 pohybuje 0... pocet sloupu
 				// sloupcu-1
 				
+				
 
 				Tile t = tiles[i][j2];
 				if (t != null) { // je na souradnich nejaka dlazdice
@@ -49,16 +50,19 @@ public class GameBoard implements TickAware {
 							gameOver = true;
 						}
 					}
+					
+				
 
 					if (t instanceof BonusTile) {
 						if (bird.collidesWithRactangles(screenX, screenY, Tile.size, Tile.size)) {
 							((BonusTile) t).setVisible(false);
 							System.out.println("safsa");
-						//	if(j % 20==1){
-							//	((BonusTile) t).setVisible(true);
-						//	}
+							
+						
 							
 							
+						}if(shiftX % 150==0){
+							((BonusTile) t).setVisible(true);
 						}
 
 					}
