@@ -13,6 +13,12 @@ public class BonusTile extends AbstractTile {
 		super(image);
 		this.emptyTile=emptyTile;
 	}
+	
+	
+	public BonusTile(BonusTile original) {
+		super(original.image);
+		emptyTile=original.emptyTile;
+	}
 
 	public void setVisible(boolean value) {
 		visible = value;
@@ -25,4 +31,7 @@ public class BonusTile extends AbstractTile {
 		}else
 		emptyTile.draw(g, x, y);
 	}
+	
+	
+	
 }

@@ -83,7 +83,17 @@ public class CsvGameBoardLoader implements GameBoardLoader {
 						cell = "";
 					}
 					// odpovidajici typ dlazdice hasMapy
-					tiles[i][j] = tileTipes.get(cell);
+					Tile t = tileTipes.get(cell);
+					if(t instanceof BonusTile){
+						//
+						tiles[i][j] = new BonusTile((BonusTile)t); // klovani bonusu
+					}else{
+						tiles[i][j]=t;
+						//
+						
+					}
+					
+						//tiles[i][j] = tileTipes.get(cell);
 				}
 			}
 			GameBoard gb = new GameBoard(tiles, imageOfTheBird);
